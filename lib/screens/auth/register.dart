@@ -46,7 +46,7 @@ print(mobile);
         prefs.setString("loginKey", data["token"] ?? "" );
         print("saved");
         /// Navigating to home screen
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyHomeScreen(),));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage(),));
 
 
         _emailController.clear();
@@ -109,7 +109,7 @@ print(mobile);
 
 
           /// login screen button
-          ElevatedButton(onPressed: (){        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyHomeScreen(),));
+          ElevatedButton(onPressed: (){        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage(),));
           }, child: Text("go to Login screen"))
 
         ],),

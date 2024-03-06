@@ -18,6 +18,22 @@ class _MyLoginScreenState extends State<MyLoginScreen> {
   var _emailController = TextEditingController();
   var _passController = TextEditingController();
 
+  void checkLogin ()async {
+  var prefs = await SharedPreferences.getInstance();
+var key =   prefs.getString("loginKey");
+if(key != null && key != "" ){
+  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage(),));
+
+}else{print("need to login prefs is empty");}
+
+  }
+  @override
+  void initState() {
+    checkLogin();
+    // TODO: implement initState
+    super.initState();
+  }
+
   void login (String email , String password) async {
 
     try{
@@ -38,10 +54,10 @@ if(response.statusCode == 200){
 
 
  /// sharing login key to shared prefs which is comming from respose.body api
- prefs.setString("loginKey", data["tocken"] ?? "" );
+await prefs.setString("loginKey", data["token"] );
 print("saved");
  /// Navigating to home screen
- Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyHomeScreen(),));
+ Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage(),));
 
 
  _emailController.clear();
