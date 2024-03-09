@@ -17,6 +17,7 @@ class ProductDetailsPage extends StatefulWidget {
 }
 
 class _ProductDetailsPageState extends State<ProductDetailsPage> {
+  bool addedToCart = false;
   int productQnty = 1 ;
   late Future<Product> futureProduct;
 
@@ -64,7 +65,10 @@ appBar: AppBar(),
                   ),
                   SizedBox(height: 20.0),
                 //  Center(child: Image.network("${BaseUrl.thumbnail_Base_Url}${snapshot.data!.thumbnail}")),
-                  Expanded(
+                  snapshot.data!.images!.length == 1 ?
+                  Center(child: Image.network("${BaseUrl.product_IMG_Url}${snapshot.data!.images![0]}")) :
+                  Container(
+                    height: 300,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: snapshot.data!.images!.length,
@@ -96,11 +100,6 @@ appBar: AppBar(),
                   SizedBox(height: 10.0),
                   Row(
                     children: [
-                      CustomElevatedButton(onPressed: (){
-                        var  productId = "${snapshot.data!.id!}" ;
-
-                        addToCart ( productId ,productQnty.toString());
-                      },buttonText: "Add to cart",),
 
                       Spacer(),
                       Container(
@@ -110,7 +109,8 @@ appBar: AppBar(),
                           Positioned(
                             bottom: 0,
                             top: 0,
-                            left: 4,
+                            right: 4,
+
                             child: InkWell(
                               onTap: () {
                                 if(productQnty < 5 ){setState(() {
@@ -126,17 +126,17 @@ appBar: AppBar(),
                           ),
 
                           Positioned(
-                            top: 0,
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            child: Center(child: Text("$productQnty",style: TextStyle(fontSize: 16),))
+                              top: 0,
+                              bottom: 0,
+                              left: 0,
+                              right: 0,
+                              child: Center(child: Text("$productQnty",style: TextStyle(fontSize: 16),))
                           ),
 
                           Positioned(
                             bottom: 0,
                             top: 0,
-                            right: 4,
+                            left: 4,
                             child: InkWell(
                               onTap: () {
                                 if(productQnty > 1 ){setState(() {
@@ -154,14 +154,18 @@ appBar: AppBar(),
 
                         ]),
                       ),
-
-
-
-
                       Spacer(),
 
-                      CustomElevatedButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => MyCartScreen(),));},
-                          buttonText: "Go to cart"),
+                      addedToCart ? CustomElevatedButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => MyCartScreen(),));},
+                    buttonText: "Go to cart") : CustomElevatedButton(onPressed: (){
+                        var  productId = "${snapshot.data!.id!}" ;
+
+                        addToCart ( productId ,productQnty.toString());
+                      },buttonText: "Add to cart",),
+
+
+
+
                     ],
                   ),
 
@@ -185,9 +189,7 @@ appBar: AppBar(),
   }
 
   void addToCart ( String productId ,String productQnty) async {
-    var prefs = await SharedPreferences.getInstance();
-    var  token = prefs.getString("loginKey");
-
+  var token = ApiList.gettoken();
     try{
       final response = await http.post(
           Uri.parse(ApiList.add_To_Cart_Post_Api),
@@ -202,7 +204,11 @@ appBar: AppBar(),
       );
 
       if(response.statusCode == 200){
-        print("product added to Cart :: ${response.body}");
+      var    data = jsonDecode(response.body);
+     // print("${data["message"]}");
+     //   print("product added to Cart :: ${response.body}");
+        addedToCart = true ;
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(backgroundColor: bgColorGreen ,content: Center(child: Text("product ${data["message"]} to Cart"))));
         setState(() {
 
         });

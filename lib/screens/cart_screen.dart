@@ -14,6 +14,8 @@ class MyCartScreen extends StatefulWidget {
 }
 
 class _MyCartScreenState extends State<MyCartScreen> {
+
+ bool noProductsCart = false ;
   List<CartProduct> productsInCart = [] ;
   List<CartProduct> parseCartProducts(String responseBody) {
     final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
@@ -44,7 +46,11 @@ class _MyCartScreenState extends State<MyCartScreen> {
     );
 
     if(response.statusCode == 200){
+     var jsonData = jsonDecode(response.body);
       print("response code is 200");
+      if(jsonData.length == 0){
+        noProductsCart = true;
+      }
       setState(() {
 
       });
@@ -94,7 +100,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
 
           Column(
             children: [
-              productsInCart.length == 0 ? Text("loding... data") :
+              productsInCart.length == 0 ? noProductsCart ? Text("No Products Here Continue shoping"):CircularProgressIndicator() :
               Expanded(
                 child: ListView.builder(
                   itemCount: productsInCart.length,
@@ -164,7 +170,15 @@ class _MyCartScreenState extends State<MyCartScreen> {
                 ),),
               ),
 
+              productsInCart.length == 0 ? Container() : Container(
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),
+                  color: Colors.blue.shade200
 
+                ),
+
+                height: 200,
+                width: double.infinity,
+                child: Text("total price"),),
 
               /// Total price to pay
 
@@ -178,9 +192,9 @@ class _MyCartScreenState extends State<MyCartScreen> {
 
 
   void removeFromCart ( String productId ) async {
-    var prefs = await SharedPreferences.getInstance();
-    var  token = prefs.getString("loginKey");
-
+   // var prefs = await SharedPreferences.getInstance();
+   // var  token = prefs.getString("loginKey");
+var token =  ApiList.gettoken();
     try{
       final response = await http.delete(
         Uri.parse(ApiList.remove_From_Cart_Delete_Api),

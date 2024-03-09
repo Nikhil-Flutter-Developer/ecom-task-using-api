@@ -1,4 +1,5 @@
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BaseUrl {
   static String digital_product_url =     "https://www.infusevalue.live/storage/app/public/product/digital-product";
@@ -21,6 +22,20 @@ class BaseUrl {
 }
 
 class ApiList {
+  /// token
+ static String _token = "" ;
+ static String gettoken () { return _token ; }
+
+
+ static settoken (value){ _token = value ;}
+
+ static set_token ()async {
+ var  prefs = await SharedPreferences.getInstance();
+    _token =  prefs.getString("loginKey")!;
+ }
+
+
+
 /// get Apis
   static String cart_products_List_Get_Api = "https://www.infusevalue.live/api/v1/cart" ;
   static String dicounted_products_list_Get_Api = "https://www.infusevalue.live/api/v1/products/discounted-product" ;
@@ -33,8 +48,11 @@ class ApiList {
 
 
  static String add_To_Cart_Post_Api = "https://www.infusevalue.live/api/v1/cart/add";
+ static String Get_Wish_List_Get_Api = "https://www.infusevalue.live/api/v1/customer/wish-list" ;
 
  static String remove_From_Cart_Delete_Api =  "https://www.infusevalue.live/api/v1/cart/remove" ;
+
+ static String remove_From_Wish_List_Delet_Api = "https://www.infusevalue.live/api/v1/customer/wish-list/remove";
 
  static String shiping_method_by_seller_Get_Api = "https://www.infusevalue.live/api/v1/shipping-method/by-seller/1/admin";
 

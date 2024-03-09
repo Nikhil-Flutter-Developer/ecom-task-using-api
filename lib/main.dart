@@ -1,10 +1,23 @@
+import 'package:ecom/provider/auth_provider.dart';
+import 'package:ecom/routes/named_routes.dart';
 import 'package:ecom/screens/auth/login.dart';
+import 'package:ecom/screens/auth/register.dart';
+import 'package:ecom/screens/cart_screen.dart';
 import 'package:ecom/screens/home_screen.dart';
 import 'package:ecom/screens/product_details.dart';
+import 'package:ecom/screens/splash_screen.dart';
+import 'package:ecom/screens/wish_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (context) => Auth_Provider(),)
+    ],
+  child: MyApp(), 
+    
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -22,9 +35,18 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
 
- //  home: ProductDetailsPage(),
-      home: MyLoginScreen(),
-      //  home: MyHomeScreen(),
+      // home: MySplashScreen(),
+
+      initialRoute: MyNamedRoutes.splashScreen,
+      routes: {
+        MyNamedRoutes.splashScreen : (context) => MySplashScreen() ,
+        MyNamedRoutes.homeScreen : (context) => HomePage() ,
+        MyNamedRoutes.cartScreen : (context) => MyCartScreen(),
+        MyNamedRoutes.wishListScreen : (context) => MyWishListScreen(),
+        MyNamedRoutes.registerScreen : (context) => MyRegScreen(),
+        MyNamedRoutes.loginScreen : (context) => MyLoginScreen(),
+      },
+
     );
   }
 }

@@ -1,9 +1,14 @@
 import 'dart:convert';
 
+import 'package:ecom/provider/auth_provider.dart';
+import 'package:ecom/screens/auth/login.dart';
 import 'package:ecom/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../routes/named_routes.dart';
 
 
 class MyRegScreen extends StatefulWidget {
@@ -14,105 +19,140 @@ class MyRegScreen extends StatefulWidget {
 }
 
 class _MyRegScreenState extends State<MyRegScreen> {
+  final mFormKey = GlobalKey<FormState>();
   var _f_Name = TextEditingController();
   var _l_Name = TextEditingController();
   var _mobile = TextEditingController();
   var _emailController = TextEditingController();
   var _passController = TextEditingController();
 
-  void reg (String firstName,String lastName, String mobile,String email , String password) async {
-print(mobile);
-    try{
-      /// hiting post api for Reg
-      Response response = await post (Uri.parse("https://www.infusevalue.live/api/v1/auth/register"),
-          body: {
-            "f_name":firstName,
-            "l_name":lastName,
-            "email":email,
-            "phone": mobile,
-            "password":password,
-          }
-      );
-
-      /// checking status code of response
-      if(response.statusCode == 200){
-        var data = jsonDecode(response.body.toString());
-        var prefs = await SharedPreferences.getInstance();
-        print("Register successful ") ;
-        print(data["token"]);
-
-
-        /// storing login key to shared prefs which is coming from response.body api
-        prefs.setString("loginKey", data["token"] ?? "" );
-        print("saved");
-        /// Navigating to home screen
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage(),));
-
-
-        _emailController.clear();
-        _passController.clear();
-
-      } else{
-        print("error");
-      }
-
-
-    }catch(e){
-      print( " e Reg : $e");
-    }
-
-
-  }
 
   @override
   Widget build(BuildContext context) {
+  var   authProvider =   Provider.of<Auth_Provider>(context);
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(children: [
-          SizedBox(height: 20,),
+        child: Form(
+          key: mFormKey,
+          child: SingleChildScrollView(
+            child: Column(children: [
+              SizedBox(height: 20,),
+              Text("Create Account",style: TextStyle(fontSize: 25,fontWeight: FontWeight.w400),),
 
-          TextField(controller: _f_Name,
-            decoration: InputDecoration(hintText: "First Name"),
+              SizedBox(height: 20,),
+
+              TextFormField(
+                keyboardType: TextInputType.name,
+                validator: (value){
+                  if(value!.isEmpty){return "Name can't be empty!";}
+                  },
+                controller: _f_Name,
+                decoration: InputDecoration(hintText: "First Name",
+                    suffixIcon: Icon(Icons.account_circle_rounded),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
+              ),
+
+              SizedBox(height: 20,),
+
+              TextFormField(
+                keyboardType: TextInputType.name,
+                validator: (value){
+                  if(value!.isEmpty){return "Last Name can't be empty!";}
+                },
+                controller: _l_Name,
+                decoration: InputDecoration(hintText: "Last Name",
+                    suffixIcon: Icon(Icons.account_circle_rounded),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))
+
+                ),
+              ),
+
+
+              SizedBox(height: 20,),
+
+              TextFormField(
+                keyboardType: TextInputType.number,
+                validator: (mobileNo){
+
+                  if(mobileNo!.length < 10 && mobileNo!.length > 10){return "Pleas enter 10 digit valid No!";}
+                  else if(mobileNo.isEmpty){ return "Please Enter a valid 10 digit No" ;}
+
+                  } ,
+                controller: _mobile,
+                decoration: InputDecoration(hintText: "Mobile no",
+                    suffixIcon: Icon(Icons.phone),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
+              ),
+
+              SizedBox(height: 20,),
+
+              TextFormField(
+
+                keyboardType: TextInputType.emailAddress,
+                validator: (email){
+                  if(email!.length < 10){return "Pleas enter 10 digit valid No!";}
+                },
+                controller: _emailController,
+                decoration: InputDecoration(hintText: "Enter Your Email Address",
+                suffixIcon: Icon(Icons.email),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))
+
+                ),
+              ),
+
+              SizedBox(height: 20,),
+
+              TextFormField(
+                validator: (pass){
+                  if(pass!.length < 6 ){return "please select 8 digit valid password";}
+                },
+                controller: _passController,
+                decoration: InputDecoration(hintText: "password",
+                    suffixIcon: Icon(Icons.password),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
+              ),
+              SizedBox(height: 20,),
+
+              /// Register button
+              SizedBox(
+                width: 150,
+                height: 30,
+                child: ElevatedButton(
+                    style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.red.shade400),
+                    foregroundColor: MaterialStatePropertyAll(Colors.white),
+                    ),
+                    onPressed: (){
+
+                  if(mFormKey.currentState!.validate()){
+                    authProvider.reg(_f_Name.text.toString(),_l_Name.text.toString(),_mobile.text.toString(),_emailController.text.toString(),_passController.text.toString(),context);
+                  }
+
+                }, child: authProvider.loading ? SizedBox(height: 15,width: 15, child: CircularProgressIndicator(color: Colors.white,)) : Text("Register Now")),
+              ),
+              SizedBox(height: 50,),
+
+              Divider(),
+              SizedBox(height: 20,),
+              /// reg screen button
+              TextButton(
+                  style: ButtonStyle(/*backgroundColor: MaterialStatePropertyAll(Colors.red.shade400),*/
+                    foregroundColor: MaterialStatePropertyAll(Colors.blue),
+                  ),
+                  onPressed: (){
+
+                //    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyLoginScreen(),));
+                    Navigator.pushReplacementNamed(context, MyNamedRoutes.loginScreen);
+
+
+                  }, child: Text("If you allready have Account Click Here"))
+
+
+
+
+            ],),
           ),
-          SizedBox(height: 20,),
-
-
-          TextField(controller: _l_Name,
-            decoration: InputDecoration(hintText: "Last Name"),
-          ),
-          SizedBox(height: 20,),
-
-
-          TextField(controller: _mobile,
-            decoration: InputDecoration(hintText: "Mobile no"),
-          ),
-          SizedBox(height: 20,),
-
-
-          TextField(controller: _emailController,
-            decoration: InputDecoration(hintText: "email"),
-          ),
-          SizedBox(height: 20,),
-
-
-          TextField(controller: _passController,
-            decoration: InputDecoration(hintText: "pass"),
-          ),
-          SizedBox(height: 20,),
-
-          /// Register button
-          ElevatedButton(onPressed: (){
-            reg(_f_Name.text.toString(),_l_Name.text.toString(),_mobile.text.toString(),_emailController.text.toString(),_passController.text.toString());
-          }, child: Text("Register now")),
-          SizedBox(height: 20,),
-
-
-          /// login screen button
-          ElevatedButton(onPressed: (){        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage(),));
-          }, child: Text("go to Login screen"))
-
-        ],),
+        ),
       ),
     );
   }

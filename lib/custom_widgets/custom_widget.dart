@@ -47,4 +47,5 @@ class CustomElevatedButton extends StatelessWidget {
   }
 }
 
-Color bgColor = Colors.grey.shade400;
+Color bgColorGrey = Colors.grey.shade400;
+Color bgColorGreen = Colors.green ;
