@@ -159,7 +159,8 @@ appBar: AppBar(),
                       addedToCart ? CustomElevatedButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => MyCartScreen(),));},
                     buttonText: "Go to cart") : CustomElevatedButton(onPressed: (){
                         var  productId = "${snapshot.data!.id!}" ;
-
+                      //  var  productRating = "${snapshot.data!.averageReview!}" ;
+                       // print("this : : $productRating");
                         addToCart ( productId ,productQnty.toString());
                       },buttonText: "Add to cart",),
 
@@ -208,7 +209,14 @@ appBar: AppBar(),
      // print("${data["message"]}");
      //   print("product added to Cart :: ${response.body}");
         addedToCart = true ;
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(backgroundColor: bgColorGreen ,content: Center(child: Text("product ${data["message"]} to Cart"))));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(backgroundColor: bgColorGreen ,
+            behavior: SnackBarBehavior.floating,
+            margin: EdgeInsets.only(
+              //  top: 100,
+              bottom: MediaQuery.of(context).size.height * 0.8,
+            ),
+
+            content: Center(child: Text("product ${data["message"]} to Cart"))));
         setState(() {
 
         });

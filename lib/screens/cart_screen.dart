@@ -79,14 +79,19 @@ class _MyCartScreenState extends State<MyCartScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade400,
-      appBar: AppBar(title: Text(" Your Cart "),
+     /* appBar: AppBar(title: Text(" Your Cart "),
       centerTitle: true,
         backgroundColor: Colors.grey.shade400,
-      ),
+      ),*/
       body: Center(
 
         child: Container(
-          padding: EdgeInsets.all(12),
+          padding: EdgeInsets.only(
+              bottom: 0,
+              top: 12,
+             right:  12,
+          left: 12,
+          ),
           child:  /* FutureBuilder(
             future: getCartProducts(),
             builder: (context, snapshot) => ListView.builder(
@@ -171,14 +176,39 @@ class _MyCartScreenState extends State<MyCartScreen> {
               ),
 
               productsInCart.length == 0 ? Container() : Container(
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),
-                  color: Colors.blue.shade200
+                decoration: BoxDecoration(
+    borderRadius: BorderRadius.only(
+    topRight: Radius.circular(20),
+    topLeft: Radius.circular(20),
+    ),
+                  color: Colors.blue.shade400
 
                 ),
 
                 height: 200,
-                width: double.infinity,
-                child: Text("total price"),),
+                width: MediaQuery.of(context).size.width ,
+                child: Stack(
+                  children: [
+                    Positioned(
+left: 0,
+                    right: 0,
+                    bottom: 30,
+                      child: InkWell(
+                        onTap: (){
+
+                        },
+                        child: Container(
+                          height: 50,
+                          decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(20)), color: Colors.red,),
+
+                          child: Center(child: Text("Order Now",style: TextStyle(fontSize: 20,color: Colors.white),)),
+                        ),
+                      ),
+                    )
+
+                  ],
+                ),
+    ),
 
               /// Total price to pay
 

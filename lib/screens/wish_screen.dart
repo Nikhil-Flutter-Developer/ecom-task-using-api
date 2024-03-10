@@ -38,7 +38,13 @@ String? id = "id";
         List<dynamic> jsonData = jsonDecode(response.body.toString());
    jsonData.length != 0 ?
    print("response code is 200 ${jsonData[0]["id"]} ") :
-       ScaffoldMessenger.of(context).showSnackBar(SnackBar(backgroundColor: Colors.pink,content: Text("No products here continue shoping")));
+       ScaffoldMessenger.of(context).showSnackBar(SnackBar(backgroundColor: Colors.pink,
+           behavior: SnackBarBehavior.floating,
+           margin: EdgeInsets.only(
+             //  top: 100,
+             bottom: MediaQuery.of(context).size.height * 0.8,
+           ),
+           content: Text("No products here continue shoping")));
 
    if(jsonData.length == 0){
      noProductsInWishList = true;
@@ -72,10 +78,10 @@ String? id = "id";
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade400,
-      appBar: AppBar(title: Text(" Your Wish List "),
+     /* appBar: AppBar(title: Text(" Your Wish List "),
         centerTitle: true,
         backgroundColor: Colors.grey.shade400,
-      ),
+      ),*/
       body: Center(
 
         child: Container(
@@ -103,7 +109,7 @@ String? id = "id";
                     width: double.infinity,
                     margin: EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                        color: Colors.pink,
+                        color: Colors.red.shade600,
                         borderRadius: BorderRadius.all(Radius.circular(24))
                     ),
 
