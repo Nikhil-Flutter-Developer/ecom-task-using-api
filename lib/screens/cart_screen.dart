@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:ecom/api_helper/api_helper.dart';
+import 'package:ecom/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -160,7 +161,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
                                 ///  remove item from cart
                                 IconButton(onPressed: () {
                                   removeFromCart("${productsInCart[index].id}");
-                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyCartScreen(),));
+                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage(index: 2),));
                                 }, icon: Icon(Icons.delete)),
 
                               ],

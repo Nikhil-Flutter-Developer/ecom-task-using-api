@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "952821458147",
+    "project_id": "ecom-task-by-nikhil",
+    "storage_bucket": "ecom-task-by-nikhil.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:952821458147:android:1b20014047b628060fd1d6",
+        "android_client_info": {
+          "package_name": "com.example.ecom"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBP6kz4LDbMKj13jiRTszXIMDgDJ2cR1lA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

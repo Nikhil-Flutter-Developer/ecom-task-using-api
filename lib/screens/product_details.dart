@@ -7,6 +7,7 @@ import 'dart:convert';
 import '../api_helper/api_helper.dart';
 import '../custom_widgets/custom_widget.dart';
 import '../model/detail_of_pro.dart';
+import 'home_screen.dart';
 
 class ProductDetailsPage extends StatefulWidget {
   final productUrl;
@@ -156,7 +157,10 @@ appBar: AppBar(),
                       ),
                       Spacer(),
 
-                      addedToCart ? CustomElevatedButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => MyCartScreen(),));},
+                      addedToCart ? CustomElevatedButton(onPressed: (){
+                        // Navigator.push(context, MaterialPageRoute(builder: (context) => MyCartScreen(),));
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage(index: 2),));
+                        },
                     buttonText: "Go to cart") : CustomElevatedButton(onPressed: (){
                         var  productId = "${snapshot.data!.id!}" ;
                       //  var  productRating = "${snapshot.data!.averageReview!}" ;

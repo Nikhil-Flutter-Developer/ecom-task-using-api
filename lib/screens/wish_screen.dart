@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:ecom/custom_widgets/custom_widget.dart';
 import 'package:ecom/model/wish_list.dart';
+import 'package:ecom/screens/home_screen.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -76,6 +77,7 @@ String? id = "id";
 
   @override
   Widget build(BuildContext context) {
+    // getCartProducts();
     return Scaffold(
       backgroundColor: Colors.grey.shade400,
      /* appBar: AppBar(title: Text(" Your Wish List "),
@@ -148,9 +150,9 @@ String? id = "id";
 
 
                                 ///  remove item from cart
-                                IconButton(onPressed: () {
+                                IconButton(onPressed: () async {
                                   removeFromWishList("${wishListItems[index]["product"]["id"]}");
-                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyWishListScreen(),));
+                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage( index: 0),));
                                 }, icon: Icon(Icons.delete)),
 
                               ],

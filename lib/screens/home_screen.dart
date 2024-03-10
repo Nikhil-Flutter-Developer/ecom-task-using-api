@@ -16,12 +16,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 
 class HomePage extends StatefulWidget {
+  int index ;
+  HomePage({ this.index = 1 });
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  int _selectedIndex = 1; // Index of the currently selected item
+  int _selectedIndex = 1 ; // Index of the currently selected item
 
  GlobalKey _bottomNavigationKey = GlobalKey();
   _onItemSelected (int index){
@@ -42,6 +44,7 @@ class _HomePageState extends State<HomePage> {
   }
   @override
   void initState() {
+    _selectedIndex = widget.index;
     super.initState();
     callFunction();
     futureProducts = fetchProducts();
@@ -115,7 +118,7 @@ class _HomePageState extends State<HomePage> {
           key: _bottomNavigationKey,
           onTap: _onItemSelected,
           animationDuration: Duration(microseconds: 700),
-          index: 1,
+          index: _selectedIndex,
           height: 50,
           items: [
             Icon(Icons.favorite,size: 30,color: Colors.black,),
